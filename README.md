@@ -1,38 +1,44 @@
-# Butterfly-species-classifier
-Butterfly species classifier was implemented using Theano and Lasagne. Convolutional Neural Network was used to classify butterfly species. 
-Lasagne layers was used to construct Convolutional Neural Network. 
-Two different methods were used to implement the classifier: 
+Key Aspects of the Code:
+CNN Architecture:
 
-# Method 1 
-**Using pre-trained weights of VGG16 net** *[Simonyan and Zisserman, 2014]*   
+Input Layer:
+The network starts with an input layer that accepts images of shape (None, 3, 224, 224), where None represents the batch size, 3 represents the color channels (RGB), and 224x224 is the resolution of the input images.
+Convolutional Layers with Batch Normalization:
 
-In this method a pre-trained [VGG16 network](https://github.com/Lasagne/Recipes/blob/master/modelzoo/vgg16.py) was taken from Lasagne model zoo, since VGG16 network was trained for ImageNet Large Scale Visual Recognition Challenge (ILSVRC) which has 1000 categories, a output classifier for butterfly species was connected to the last fully connected layer of the VGG16 network, so that we can get probabilities/score for 10 categories(butterfly species). After that network was trained for 20 epochs. This model gave best validation accuracy of 98% and test accuracy of 99%.
+The CNN consists of several convolutional layers, each followed by batch normalization to stabilize and accelerate training. The convolution layers are initialized using Glorot Uniform and use the ReLU activation function.
+The network applies two convolution layers sequentially, followed by a max-pooling layer to reduce the spatial dimensions.
+The convolution layers have a kernel size of 3x3 and use padding to maintain the same spatial dimensions before pooling.
+Max Pooling:
 
-# Method 2  
+After every two convolution layers, a max-pooling layer with a 2x2 pool size is applied to down-sample the feature maps.
+Fully Connected Layers (Affine Layers):
 
-In this method Convolutional Neural Network was created with architecture of type Conv-ReLu-Conv-ReLu-MaxPool-Conv-ReLu-Conv-ReLu-MaxPool-Affine-Dropout-Affine-dropout-Affine-Softmax, where first two convolution layers had 64 filters and next two convolution layers had 128 filters, both affine layers had 256 hidden neurons with dropout of 50%.  
+Two fully connected (dense) layers are used in this architecture, each followed by dropout for regularization to prevent overfitting. The dropout rate is set to 0.5, and the layers are initialized using Glorot Uniform with ReLU activation.
+Output Layer (Scores):
 
-This network was trained for 60 epochs. There was noticeable overfitting after training. This model gave best validation accuracy of 72% and test accuracy of 81.25%.  
-Network was trained with random values of hyperparameters like regularization parameter, learning rate etc. Performance can be improved by validation of hyperparameters.  
+The final layer is a fully connected layer with a softmax activation function. It computes the class probabilities for each input image. The number of classes (num_classes) is set to 10, which represents the 10 different butterfly species the model is trained to classify.
+Function Definition:
+create_cnn: This function defines the CNN model architecture and returns the network. The function takes the following parameters:
+input_shape: Shape of the input image (default is (None, 3, 224, 224)).
+num_filters: List of filter sizes for the convolutional layers.
+filter_size: Size of the convolutional kernel (default is 3).
+hidden_dims: List of dimensions for the fully connected (dense) layers.
+num_classes: The number of output classes (default is 10).
+README Instructions:
+To create a README file for this project, you can include:
 
-# Performance 
-Clearly network trained with pre-trained weights gave far more better performance than method2.  
-
-![alt tag](https://raw.githubusercontent.com/rajats/Butterfly-species-classifier/master/result1.PNG)  
-
-![alt tag](https://raw.githubusercontent.com/rajats/Butterfly-species-classifier/master/result2.PNG)  
-
-# Data  
-Get the Leeds Butterfly Dataset:
-```
-wget http://www.comp.leeds.ac.uk/scs6jwks/dataset/leedsbutterfly/files/leedsbutterfly_dataset_v1.0.zip  
-```  
-and run  
-```
-python divide_dataset_into_classes.py    
-```  
-
-## Acknowledgement  
-[Leeds Butterfly Dataset](http://www.comp.leeds.ac.uk/scs6jwks/dataset/leedsbutterfly/)
-
-
+Project Title: Butterfly Species Classification using CNN
+Description: This project implements a Convolutional Neural Network (CNN) to classify images of butterfly species. The model is built using the Lasagne library in Python and trained on butterfly image data.
+Dependencies:
+Python
+Lasagne
+NumPy
+Theano (Lasagne depends on Theano)
+Usage:
+Import the create_cnn function from the model file.
+Define the model by calling create_cnn and pass the necessary parameters.
+Train the model using your butterfly species dataset.
+Training:
+Prepare the butterfly image dataset with appropriate labels.
+Train the CNN model using a suitable training loop.
+Evaluate the performance using metrics such as accuracy.
